@@ -11,3 +11,8 @@ class Category(models.Model):
 
 	def __str__(self):
 		return self.name
+
+ 	#for fixing the naming in django admin
+	class Meta:
+		verbose_name="Category"
+		verbose_name_plural="Categories"

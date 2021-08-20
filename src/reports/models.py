@@ -38,3 +38,9 @@ class ProblemReported(models.Model):
 
 	def __str__(self):
 		return "{}-{}".format(self.category.name, self.description[:20])
+
+
+	 	#for fixing the naming in django admin
+	class Meta:
+		verbose_name="Problem Reported"
+		verbose_name_plural="Problems Reported"
