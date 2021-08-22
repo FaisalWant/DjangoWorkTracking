@@ -6,6 +6,6 @@ app_name='reports'
 
 urlpatterns =[
 
-	path('', report_view, name="report-view")
+	path('<str:production_line>/', report_view, name="report-view")
 
 ]
