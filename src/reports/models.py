@@ -22,7 +22,8 @@ class Report(models.Model):
 
 	def __str__(self):
 		return "{}-{}-{}".format(self.start_hour,self.end_hour,self.production_line)
-
+	class Meta:
+		ordering=('created',)
 
 
 class ProblemReported(models.Model):
@@ -40,7 +41,7 @@ class ProblemReported(models.Model):
 		return "{}-{}".format(self.category.name, self.description[:20])
 
 
-	 	#for fixing the naming in django admin
+		#for fixing the naming in django admin
 	class Meta:
 		verbose_name="Problem Reported"
 		verbose_name_plural="Problems Reported"
