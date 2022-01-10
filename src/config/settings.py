@@ -25,7 +25,7 @@ SECRET_KEY = '3*#-#%k!cgkg3o+b(l5&in@%iz6ifj4an1+p137-s%m6^)qj=i'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.101.3','172.16.1.128', '192.168.101.4','192.168.101.2']
+ALLOWED_HOSTS = ['127.0.0.1','10.0.2.15','192.168.101.3','172.16.1.128', '192.168.101.4','192.168.101.2','172.16.1.208']
 
 
 # Application definition
@@ -37,14 +37,48 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+
     'crispy_forms',
     'profiles',
     'reports', 
     'areas', 
     'products',
     'categories',
+    'posts',
 
 ]
+
+SITE_ID = 1
+
+LOGIN_REDIRECT_URL= '/'
+
+LOGOUT_REDIRECT_URL = '/accounts/login'
+
+if DEBUG:
+    EMAIL_BACKEND='django.core.mail.backends.dummy.EmailBackend'
+
+
+
+
+
+
+
+ACCOUNT_EMAIL_REQUIRED=True
+ACCOUNT_EMAIL_UNIQUE=True
+ACCOUNT_AUTHENTICATION_METHOD='email'
+
+ACCOUNT_SIGNUP_FORM_CLASS='config.forms.CustomSignUpForm'
+
+
+# ACCOUNT_SIGNUP_FORM_CLASS=
+
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -54,6 +88,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'posts.custommiddleware.CustomMiddlewareExample'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -69,10 +104,25 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'profiles.context_processors.profile_pic',
+                'profiles.context_processors.get_profile',
             ],
         },
     },
 ]
+
+
+
+AUTHENTICATION_BACKENDS = [
+
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+
+]
+
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
@@ -120,7 +170,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-
+LOGIN_URL='/admin/'
 
 
 

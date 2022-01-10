@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %} post details {% endblock %}
+
+
+{% block content %}
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+.tg .tg-llyw{background-color:#c0c0c0;border-color:inherit;text-align:left;vertical-align:top}
+</style>
+
+
+
+<div class="col-9 mx-auto">
+
+
+	<div class="bg-white p-4 rounded">
+
+{% if data.report %}
+
+
+		<table class="tg">
+		<thead>
+		  <tr>
+		    <th class="tg-llyw">Author</th>
+		    <th class="tg-llyw">{{data.author}}</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <tr>
+		    <td class="tg-llyw">Day</td>
+		    <td class="tg-llyw">{{data.report.day}}</td>
+		  </tr>
+		  <tr>
+		    <td class="tg-llyw">Hour from</td>
+		    <td class="tg-llyw">{{data.report.start_hour}}</td>
+		  </tr>
+		  <tr>
+		    <td class="tg-llyw">Hour to</td>
+		    <td class="tg-llyw">{{data.report.end_hour}}</td>
+		  </tr>
+
+		    <tr>
+		    <td class="tg-llyw">Product / Production Line</td>
+		    <td class="tg-llyw">{{data.report.product}} / {{ data.report.production_line }}</td>
+		  </tr>
+		    <tr>
+		    <td class="tg-llyw">Plan / Execution </td>
+		    <td class="tg-llyw">{{data.report.plan}} / {{ data.report.execution }}</td>
+		  </tr>
+		</tbody>
+		</table>
+		<br>
+		<strong>{{ data.problem_reported.category }}
+
+			<br>
+
+		<small class="text-muted">{{data.problem_reported.problem_id}}</small>
+		<br>
+		Cost: {{data.problem_reported.breakdown }} min
+
+{% else %}
+		
+
+		{% if data.image %}
+		<div class="mb-3"><img src="{{ data.image.url }}" class="w-100"></div>
+
+		{% endif %}
+		<h5> {{ data.title }}</h5>
+		<p>{{ object.description }}</p>
+		{% endif %}
+
+		<div class="row">
+			<div class="col-2 my-3">
+				
+				<a href="{% url 'posts:post-list' %}">
+					<button class="btn btn-warning"><i class="fas fa-arrow-left mr-2"></i> Back to board
+				</button></a>
+
+
+			</div>
+
+			{% if not data.report and data.author.user == request.user %}
+			<div class="col-2 my-3">
+				<a href="{% url 'posts:gp-delete' data.id %}">
+					<button class="btn btn-danger h-100 ml-2">
+						<i class="fas fa-times mr-1"></i>Delete
+					</button></a>
+			</div>
+			{% endif %}
+
+
+
+		</div>
+
+{% if not data.report %}
+
+
+<h3> Share your Thoughts </h3>
+		<form action="" method="POST">
+			{% csrf_token %}
+
+			{{form|crispy}}
+			<button class ="btn btn-primary" type="submit"> Add comment</button>
+		</form>
+
+
+		<div id="comments"> All Comments ({{ data.comments.all.count }})</div>
+
+		<br>
+		<div id="comment-box">
+		{% if data.comments.all %}
+
+		{% for c in data.comments.all %}
+
+		<div class="card p-3 my-2">
+
+		<div class="row">
+
+			<div class="col-2">
+
+				<img src="{{ c.user.profile_picture.url }}" width="60" height="60" class ="rounded-circle border">
+
+			</div>
+
+			<div class="col-8">
+
+				<div class="text muted small mb-1"> {{c.user}} | {{c.created| timesince}} ago
+
+				</div>
+				<div>{{c.body}}</div>
+		</div>
+	</div>
+</div>
+
+		{% endfor %}
+
+		{% else %}
+		<h3> No Comments Yet</h3>
+
+
+
+		{% endif %}
+	</div>
+{% endif %}
+</div>
+</div>
+
+
+
+
+
+{% endblock content %}
